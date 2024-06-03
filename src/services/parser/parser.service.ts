@@ -11,7 +11,10 @@ export class ParserService extends Parser {
   }
 
   async getPhoto(nick: string): Promise<any> {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: "shell",
+      args: ["--enable-gpu"],
+    });
     const page = await browser.newPage();
     await page.goto(`${this.url}${nick}`);
     await sleep(10000);
