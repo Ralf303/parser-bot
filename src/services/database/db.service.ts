@@ -37,7 +37,7 @@ export class DatabaseService extends Database {
           },
         });
       }
-
+      //@ts-ignore
       return user;
     } catch (error) {
       console.log(error);
