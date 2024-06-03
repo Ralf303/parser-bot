@@ -15,9 +15,13 @@ export class ParserService extends Parser {
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
     const page = await browser.newPage();
+    console.log("страница создана");
     await page.goto(`${this.url}${nick}`);
+    console.log("страница уходит на рендер");
     await sleep(10000);
+    console.log("страница щас будет скрин");
     await page.screenshot({ path: "example.png" });
+    console.log("страница скрин");
     // await page.waitForSelector('img[alt="Фото профиля ${nick}"]');
     // const elements = await page.$$eval(
     //   `img[alt="Фото профиля ${nick}"]`,
