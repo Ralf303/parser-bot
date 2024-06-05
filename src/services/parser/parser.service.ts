@@ -87,6 +87,7 @@ export class ParserService extends Parser {
       await page.type('input[aria-label="Password"]', this.instaPassword);
       await page.locator("button[type='submit']").click();
       await sleep(3000);
+      await page.screenshot({ path: "scrin.jpg" });
       //@ts-ignore
       await ctx.telegram.editMessageText(
         ctx.from?.id,
@@ -96,7 +97,6 @@ export class ParserService extends Parser {
       );
       await page.goto(`${this.url}${nick}`);
       await sleep(3000);
-      await page.screenshot({ path: "scrin.jpg" });
       await page.waitForSelector(`img[alt="${nick}'s profile picture"]`);
 
       const imgElement = await page.waitForSelector(
