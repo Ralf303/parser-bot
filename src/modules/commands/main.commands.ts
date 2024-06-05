@@ -13,7 +13,7 @@ export class Commands extends Command {
     this.bot.start(async (ctx) => {
       try {
         const { id } = ctx.from;
-        const user = await this.db.getUser(String(id));
+        await this.db.getUser(String(id));
         await ctx.reply(ru.commands.start, {
           reply_markup: this.keyboardService.start(),
         });

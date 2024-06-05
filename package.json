@@ -25,7 +25,9 @@
   "dependencies": {
     "@prisma/adapter-pg": "^5.14.0",
     "@prisma/client": "^5.14.0",
+    "axios": "^1.7.2",
     "dotenv": "^16.4.5",
+    "jimp": "^0.22.12",
     "pg": "^8.11.5",
     "puppeteer": "^22.10.0",
     "telegraf": "^4.16.3",

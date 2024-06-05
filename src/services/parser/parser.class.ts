@@ -1,5 +1,17 @@
-export default abstract class Parser {
-  constructor() {}
+import { CustomContext } from "../../core/context";
 
-  abstract getPhoto(nick: string): Promise<any>;
+export default abstract class Parser {
+  protected instaLogin: string;
+  protected instaPassword: string;
+
+  constructor(instaLogin: string, instaPassword: string) {
+    this.instaLogin = instaLogin;
+    this.instaPassword = instaPassword;
+  }
+
+  abstract getPhoto(
+    nick: string,
+    messageId: number,
+    ctx: CustomContext
+  ): Promise<any>;
 }

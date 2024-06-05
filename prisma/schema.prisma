@@ -8,5 +8,6 @@ datasource db {
 }
 
 model Users {
-  id String @id
+  id      String  @id
+  isAdmin Boolean @default(false)
 }

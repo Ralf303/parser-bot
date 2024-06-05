@@ -43,4 +43,45 @@ export class DatabaseService extends Database {
       console.log(error);
     }
   }
+
+  async isAdmin(chatId: string): Promise<boolean> {
+    const user: User | null = await this.prisma.users.findFirst({
+      where: {
+        id: chatId,
+      },
+    });
+    return user ? user.isAdmin : false;
+  }
+
+  async makeAdmin(id: string): Promise<boolean> {
+    try {
+      const user = await this.prisma.users.findFirst({
+        where: {
+          id: id,
+        },
+      });
+
+      if (!user) {
+        return false;
+      }
+
+      await this.prisma.users.update({
+        where: {
+          id: id,
+        },
+        data: {
+          isAdmin: true,
+        },
+      });
+
+      return true;
+    } catch (error) {
+      console.error(error);
+    }
+    return true;
+  }
+
+  async getUsers(): Promise<User[]> {
+    return this.prisma.users.findMany();
+  }
 }

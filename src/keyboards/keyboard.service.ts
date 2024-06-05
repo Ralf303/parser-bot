@@ -18,4 +18,19 @@ export default class KeyboardService implements IKeyboard {
 
     return keyboard.reply_markup;
   }
+
+  pay(): InlineKeyboardMarkup {
+    const keyboard = Keyboard.inline([
+      [ru.buttons.pay.ones],
+      [ru.buttons.pay.always],
+    ]);
+
+    return keyboard.reply_markup;
+  }
+
+  sucsess(): InlineKeyboardMarkup {
+    const keyboard = Keyboard.inline([[ru.buttons.sucsess]]);
+
+    return keyboard.reply_markup;
+  }
 }
