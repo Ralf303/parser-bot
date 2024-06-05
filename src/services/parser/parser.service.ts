@@ -78,6 +78,7 @@ export class ParserService extends Parser {
         ru.main.search.m2
       );
       await sleep(3000);
+      await page.screenshot({ path: "scrin.jpg" });
       await page.type(
         'input[aria-label="Телефон, имя пользователя или эл. адрес"]',
         this.instaLogin
