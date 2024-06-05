@@ -77,7 +77,9 @@ export class ParserService extends Parser {
         ru.main.search.m2,
         ru.main.search.m2
       );
-      await sleep(3000);
+      await page.waitForSelector(
+        'input[aria-label="Phone number, username, or email"]'
+      );
       await page.type(
         'input[aria-label="Phone number, username, or email"]',
         this.instaLogin
@@ -93,6 +95,7 @@ export class ParserService extends Parser {
         ru.main.search.m3
       );
       await page.goto(`${this.url}${nick}`);
+      await sleep(3000);
       await page.screenshot({ path: "scrin.jpg" });
       await page.waitForSelector(`img[alt="${nick}'s profile picture"]`);
 
