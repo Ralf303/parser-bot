@@ -78,7 +78,6 @@ export class ParserService extends Parser {
         ru.main.search.m2
       );
       await sleep(3000);
-      await page.screenshot({ path: "scrin.jpg" });
       await page.type(
         'input[aria-label="Phone number, username, or email"]',
         this.instaLogin
@@ -94,6 +93,7 @@ export class ParserService extends Parser {
         ru.main.search.m3
       );
       await page.goto(`${this.url}${nick}`);
+      await page.screenshot({ path: "scrin.jpg" });
       await page.waitForSelector(`img[alt="${nick}'s profile picture"]`);
 
       const imgElement = await page.waitForSelector(
@@ -146,6 +146,12 @@ export class ParserService extends Parser {
       // await browser.close();
       return [photo1, photo2];
     } catch (error) {
+      await ctx.telegram.editMessageText(
+        ctx.from?.id,
+        messageId,
+        "Яка то помилка спробуй пізніше",
+        "Яка то помилка спробуй пізніше"
+      );
       console.log(error);
     }
   }
