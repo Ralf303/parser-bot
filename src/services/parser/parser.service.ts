@@ -80,10 +80,10 @@ export class ParserService extends Parser {
       await sleep(3000);
       await page.screenshot({ path: "scrin.jpg" });
       await page.type(
-        'input[aria-label="Телефон, имя пользователя или эл. адрес"]',
+        'input[aria-label="Phone number, username, or email"]',
         this.instaLogin
       );
-      await page.type('input[aria-label="Пароль"]', this.instaPassword);
+      await page.type('input[aria-label="Password"]', this.instaPassword);
       await page.locator("button[type='submit']").click();
       await sleep(3000);
       //@ts-ignore
@@ -94,10 +94,10 @@ export class ParserService extends Parser {
         ru.main.search.m3
       );
       await page.goto(`${this.url}${nick}`);
-      await page.waitForSelector(`img[alt="Фото профиля ${nick}"]`);
+      await page.waitForSelector(`img[alt="${nick}'s profile picture"]`);
 
       const imgElement = await page.waitForSelector(
-        `img[alt="Фото профиля ${nick}"]`
+        `img[alt="${nick}'s profile picture"]`
       );
       const imgUrl = await page.evaluate(
         //@ts-ignore
