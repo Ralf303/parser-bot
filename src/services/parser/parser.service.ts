@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer";
+import puppeteer, { Browser, Page } from "puppeteer";
 import Parser from "./parser.class";
 import fs from "fs";
 import { sleep } from "../../utils/helpers";
@@ -8,11 +8,47 @@ import ru from "../../localization/ru.json";
 
 export class ParserService extends Parser {
   private url: string = "https://instagram.com/";
+  private browser: Promise<Browser>;
 
   constructor(instaLogin: string, instaPassword: string) {
     super(instaLogin, instaPassword);
+    this.browser = this.registration();
   }
 
+  private async registration(): Promise<Browser> {
+    const browser: Browser = await puppeteer.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+
+    const page = await browser.newPage();
+
+    await page.goto(`${this.url}`);
+    // await page.waitForSelector(
+    //   'input[aria-label="Телефон, имя пользователя или эл. адрес"]'
+    // );
+    // await page.type(
+    //   'input[aria-label="Телефон, имя пользователя или эл. адрес"]',
+    //   this.instaLogin
+    // );
+    // await page.type('input[aria-label="Пароль"]', this.instaPassword);
+
+    await page.waitForSelector(
+      'input[aria-label="Phone number, username, or email"]'
+    );
+    await page.type(
+      'input[aria-label="Phone number, username, or email"]',
+      this.instaLogin
+    );
+    await page.type('input[aria-label="Password"]', this.instaPassword);
+    await page.locator("button[type='submit']").click();
+    await sleep(3000);
+    await page.screenshot({ path: "scrin.jpg" });
+    console.log("Браузер подключен и создан");
+
+    await page.close();
+
+    return browser;
+  }
   private async blendPhoto(nick: string, bgn: string) {
     const bg = await Jimp.read(`res/bg${bgn}.jpg`);
 
@@ -64,12 +100,8 @@ export class ParserService extends Parser {
     ctx: CustomContext
   ): Promise<any> {
     try {
-      const browser = await puppeteer.launch({
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      });
+      const browser = await this.browser;
       const page = await browser.newPage();
-
-      await page.goto(`${this.url}`);
       //@ts-ignore
       await ctx.telegram.editMessageText(
         ctx.from?.id,
@@ -77,17 +109,21 @@ export class ParserService extends Parser {
         ru.main.search.m2,
         ru.main.search.m2
       );
-      await page.waitForSelector(
-        'input[aria-label="Phone number, username, or email"]'
-      );
-      await page.type(
-        'input[aria-label="Phone number, username, or email"]',
-        this.instaLogin
-      );
-      await page.type('input[aria-label="Password"]', this.instaPassword);
-      await page.locator("button[type='submit']").click();
+
+      await page.goto(`${this.url}${nick}`);
       await sleep(3000);
-      await page.screenshot({ path: "scrin.jpg" });
+      // await page.waitForSelector(`img[alt="Фото профиля ${nick}"]`);
+
+      // const imgElement = await page.waitForSelector(
+      //   `img[alt="Фото профиля ${nick}"]`
+      // );
+
+      await page.goto(`${this.url}${nick}`);
+      await sleep(3000);
+      await page.waitForSelector(`img[alt="${nick}'s profile picture"]`);
+      const imgElement = await page.waitForSelector(
+        `img[alt="${nick}'s profile picture"]`
+      );
       //@ts-ignore
       await ctx.telegram.editMessageText(
         ctx.from?.id,
@@ -95,13 +131,7 @@ export class ParserService extends Parser {
         ru.main.search.m3,
         ru.main.search.m3
       );
-      await page.goto(`${this.url}${nick}`);
-      await sleep(3000);
-      await page.waitForSelector(`img[alt="${nick}'s profile picture"]`);
 
-      const imgElement = await page.waitForSelector(
-        `img[alt="${nick}'s profile picture"]`
-      );
       const imgUrl = await page.evaluate(
         //@ts-ignore
         (img) => img.getAttribute("src"),
@@ -147,6 +177,7 @@ export class ParserService extends Parser {
         ru.main.search.m6
       );
       // await browser.close();
+      await page.close();
       return [photo1, photo2];
     } catch (error) {
       await ctx.telegram.editMessageText(
@@ -159,3 +190,14 @@ export class ParserService extends Parser {
     }
   }
 }
+
+// await page.locator("button[type='submit']").click();
+// await sleep(3000);
+// await page.screenshot({ path: "scrin.jpg" });
+// //@ts-ignore
+// await ctx.telegram.editMessageText(
+//   ctx.from?.id,
+//   messageId,
+//   ru.main.search.m3,
+//   ru.main.search.m3
+// );
