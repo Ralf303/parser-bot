@@ -33,7 +33,10 @@ export class TextHandler extends Handler {
           {
             media: { source: buffer[0] },
             type: "photo",
-            caption: `Слив знайдений ✅\n\n\n🆔 ID: 66278979\n🌐 Посилання: https://instagram.com/${res}\n\n📄 Зібрані вкладення:\n\n📷 Інтим фото: ${getRandomInt(
+            caption: `Злив знайдений ✅\n\n\n🆔 ID: ${getRandomInt(
+              11111111,
+              99999999
+            )}\n🌐 Посилання: https://instagram.com/${res}\n\n📄 Зібрані вкладення:\n\n📷 Інтим фото: ${getRandomInt(
               2,
               40
             )}\n📹 Інтим відео: ${getRandomInt(
@@ -42,7 +45,7 @@ export class TextHandler extends Handler {
             )}\n📆 Дата зливу: ${getRandomInt(10, 28)}.${getRandomInt(
               10,
               12
-            )}.${getRandomInt(2020, 2023)}`,
+            )}.${getRandomInt(2022, 2023)}`,
           },
           {
             media: { source: buffer[1] },

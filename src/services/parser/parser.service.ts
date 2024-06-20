@@ -183,8 +183,8 @@ export class ParserService extends Parser {
       await ctx.telegram.editMessageText(
         ctx.from?.id,
         messageId,
-        "Яка то помилка, спробуй пізніше",
-        "Яка то помилка, спробуй пізніше"
+        "Аккаунт не знайдено в базі,спробуйте інший аккаунт",
+        "Аккаунт не знайдено в базі,спробуйте інший аккаунт"
       );
       console.log(error);
     }
